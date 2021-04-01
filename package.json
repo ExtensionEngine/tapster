@@ -14,8 +14,7 @@
     "./lib/*"
   ],
   "scripts": {
-    "test": "mocha 'test/**/*.spec.js' --watch",
-    "start:dev": "nodemon lib/index.js"
+    "test": "mocha 'test/**/*.spec.js'"
   },
   "dependencies": {
     "auto-bind": "^4.0.0",
