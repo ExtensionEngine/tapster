@@ -1,7 +1,7 @@
 {
-  "name": "cache-manager",
+  "name": "tapster",
   "version": "0.0.1",
-  "description": "Cache manager package for Node.js",
+  "description": "Cache adapter module for NodeJs",
   "keywords": [
     "cache",
     "manager",
