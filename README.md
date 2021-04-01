@@ -19,7 +19,7 @@ See examples below and in the examples directory.
 const client = new CacheManager({ store: 'memory', ttl: 10 /* seconds */ });
 
 (async function () {
-  // If set method is called without ttl, the default ttl will be used
+  // If the set method is called without ttl, the default ttl will be used
   await client.set('foo', 'bar');
   await client.get('foo'); // bar
   await client.has('foo') // true
@@ -77,7 +77,7 @@ const client = new CacheManager({ store: CustomStore });
 - `password` (optional) - redis password.
 
 ## API
-- `set(key, value, ttl)` - TTL is optional. The global ttl will be used if set method is called without ttl parametar.
+- `set(key, value, ttl)` - TTL is optional. The global ttl will be used if the set method is called without ttl parameter.
 - `get(key) => value`
 - `delete(key)`
 - `has(key)`
