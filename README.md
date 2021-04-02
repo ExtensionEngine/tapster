@@ -77,7 +77,7 @@ const client = new CacheManager({ store: CustomStore });
 - `password` (optional) - redis password.
 
 ## API
-- `set(key, value, ttl)` - TTL is optional. The global ttl will be used if the set method is called without ttl parameter.
+- `set(key, value, ttl)` - TTL is optional. The global ttl will be used if the set method is called without a ttl parameter.
 - `get(key) => value`
 - `delete(key)`
 - `has(key)`

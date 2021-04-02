@@ -4,7 +4,6 @@ const CacheManager = require('../lib');
 
 class Custom {
   constructor() {
-    this.name = 'custom';
     this.entries = {};
   }
 
