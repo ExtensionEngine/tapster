@@ -7,6 +7,14 @@
     "manager",
     "nodejs"
   ],
+  "homepage": "https://github.com/ExtensionEngine/tapster#readme",
+  "bugs": {
+    "url": "https://github.com/ExtensionEngine/tapster/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExtensionEngine/tapster.git"
+  },
   "license": "MIT",
   "author": "ExtensionEngine <info@extensionengine.com>",
   "main": "lib/index.js",
