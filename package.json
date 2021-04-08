@@ -1,5 +1,5 @@
 {
-  "name": "tapster",
+  "name": "@extensionengine/tapster",
   "version": "0.0.1",
   "description": "Cache adapter module for NodeJs",
   "keywords": [
