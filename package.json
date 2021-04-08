@@ -1,6 +1,6 @@
 {
   "name": "tapster",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Cache adapter module for NodeJs",
   "keywords": [
     "cache",
