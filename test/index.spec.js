@@ -97,6 +97,19 @@ describe('CacheManager', () => {
     ];
 
     methods.forEach(({ name, args }) => {
+      it(`${name} should call provider's ${name} using the default namespace`, () => {
+        const stubMethod = sinon.stub(Memory.prototype, name).callsFake(() => {});
+        const CacheManager = proxyquire('../lib', {
+          './providers/memory': Memory
+        });
+        const [key] = args;
+        const cache = new CacheManager();
+        cache[name](...args);
+        expect(stubMethod.calledWith(`default:${key}`)).to.be.true;
+      });
+    });
+
+    methods.forEach(({ name, args }) => {
       it(`${name} should call provider's ${name} using the given namespace`, () => {
         const stubMethod = sinon.stub(Memory.prototype, name).callsFake(() => {});
         const CacheManager = proxyquire('../lib', {
