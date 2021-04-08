@@ -73,4 +73,41 @@ describe('CacheManager', () => {
       });
     });
   });
+
+  describe('namespaces', () => {
+    it('should use default namespace when no namespace is specified', () => {
+      const CacheManager = require('../lib');
+      const cache = new CacheManager({ ttl: 10 });
+      expect(cache.namespace).to.be.eq('default');
+    });
+
+    it('should use provided namespace', () => {
+      const CacheManager = require('../lib');
+      const namespace = 'test';
+      const cache = new CacheManager({ namespace });
+      expect(cache.namespace).to.be.eq(namespace);
+    });
+
+    const methods = [
+      { name: 'set', args: ['foo', 'bar'] },
+      { name: 'get', args: ['foo'] },
+      { name: 'has', args: ['foo'] },
+      { name: 'delete', args: ['foo'] },
+      { name: 'getKeys', args: ['*'] }
+    ];
+
+    methods.forEach(({ name, args }) => {
+      it(`${name} should call provider's ${name} using the given namespace`, () => {
+        const stubMethod = sinon.stub(Memory.prototype, name).callsFake(() => {});
+        const CacheManager = proxyquire('../lib', {
+          './providers/memory': Memory
+        });
+        const namespace = 'test';
+        const [key] = args;
+        const cache = new CacheManager({ namespace });
+        cache[name](...args);
+        expect(stubMethod.calledWith(`${namespace}:${key}`)).to.be.true;
+      });
+    });
+  });
 });
