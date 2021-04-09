@@ -122,5 +122,28 @@ describe('CacheManager', () => {
         expect(stubMethod.calledWith(`${namespace}:${key}`)).to.be.true;
       });
     });
+
+    it('should delete all records under the certain namespace when clear method is called', async () => {
+      const CacheManager = require('../lib');
+      const cache = new CacheManager({ namespace: 'test-2' });
+      await cache.set('foo', 'bar');
+      await cache.set('zoo', 'baz');
+      await cache.clear();
+      const keys = await cache.getKeys();
+      expect(keys.length).to.be.eq(0);
+    });
+
+    it('clear method should delete only records under the given namespace', async () => {
+      const CacheManager = require('../lib');
+      const cache1 = new CacheManager({ namespace: 'test-1' });
+      const cache2 = new CacheManager({ namespace: 'test-2' });
+      await cache1.set('foo', 'bar');
+      await cache1.set('zoo', 'baz');
+      await cache2.set('foo', 'bar');
+      await cache2.set('zoo', 'baz');
+      await cache2.clear();
+      const keys = await cache1.getKeys();
+      expect(keys).to.have.all.members(['foo', 'zoo']);
+    });
   });
 });
