@@ -22,7 +22,7 @@ async function example1() {
 }
 
 async function example2() {
-  const client = new CacheManager({ store: 'memory', ttl: 5 }); // ttl - time to live in seconds
+  const client = new CacheManager({ store: 'memory', ttl: 5, namespace: 'example-2' }); // ttl - time to live in seconds
 
   await client.set('foo', 'bar');
   console.log(await client.get('foo')); // bar

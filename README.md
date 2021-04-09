@@ -18,27 +18,25 @@ See examples below and in the examples directory.
 ```js
 const client = new CacheManager({ store: 'memory', ttl: 10 /* seconds */ });
 
-(async function () {
-  // If the set method is called without ttl, the default ttl will be used
-  await client.set('foo', 'bar');
-  await client.get('foo'); // bar
-  await client.has('foo') // true
-  await client.has('baz'); // false
+// If the set method is called without ttl, the default ttl will be used
+await client.set('foo', 'bar');
+await client.get('foo'); // bar
+await client.has('foo') // true
+await client.has('baz'); // false
 
-  await sleep('10s');
-  await client.get('foo'); // undefined
-  await client.has('foo') // false
+await sleep('10s');
+await client.get('foo'); // undefined
+await client.has('foo') // false
 
-  // When ttl is defined, it will overwrite the default one
-  await client.set('foo', 'bar', 5);
-  await client.has('foo') // true
+// When ttl is defined, it will overwrite the default one
+await client.set('foo', 'bar', 5);
+await client.has('foo') // true
 
-  await sleep('5s');
-  await client.has('foo') // false
+await sleep('5s');
+await client.has('foo') // false
 
-  // ttl = 0 means no expiration time
-  await client.set('foo', 'bar', 0);
-})()
+// ttl = 0 means no expiration time
+await client.set('foo', 'bar', 0);
 ```
 
 ### Redis store
@@ -67,10 +65,34 @@ const client = new CacheManager({ store: CustomStore });
   await client.get('foo'); // bar
 // ...  
 ```
+
+### Namespaces
+You can namespace your cache instance to avoid key collisions and allow you to clear only a certain namespace while using the same database.
+```js
+const users = new CacheManager({ namespace: 'users' });
+const cars = new CacheManager({ namespace: 'cars' });
+
+await users.set('record-1', 'John');
+await cars.set('record-1', 'Honda');
+
+console.log('User keys: ', await users.getKeys()); // ['record-1'];
+console.log(await users.get('record-1')); // John
+console.log('Car keys: ', await cars.getKeys()); // ['record-1']
+console.log(await cars.get('record-1')); // Honda
+
+await users.clear();
+
+console.log('User keys: ', await users.getKeys()); // []
+console.log(await users.get('record-1')); // undefined
+console.log('Car keys: ', await cars.getKeys()); // ['record-1']
+console.log(await cars.get('record-1')); // Honda
+```
+
 ## Options
 ### Common
-- `store` - built-in store (`memory`, `redis`) or custom store.
-- `ttl` - time to live in seconds.
+- `store` (optional) - built-in store (`memory`, `redis`) or custom store. Default is `memory`.
+- `ttl` (optional) - time to live in seconds. Default is `0`.
+- `namespace` (optional) - namespace cache instance to avoid key collisions. Default is `default`.
 ### Redis store
 - `host` (required) - redis host.
 - `port` (required) - redis port.
@@ -81,6 +103,7 @@ const client = new CacheManager({ store: CustomStore });
 - `get(key) => value`
 - `delete(key)`
 - `has(key)`
+- `clear` - Clear all records under the certain namespace
 - `getKeys(pattern) => keys`
 
 Supported glob-style patterns:

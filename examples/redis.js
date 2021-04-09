@@ -6,7 +6,8 @@ async function example1() {
   const client = new CacheManager({
     store: 'redis',
     host: 'localhost',
-    port: 6379
+    port: 6379,
+    namespace: 'example-1'
   });
 
   await client.set('foo', 'bar');
@@ -30,7 +31,8 @@ async function example2() {
     store: 'redis',
     host: 'localhost',
     port: 6379,
-    ttl: 5 // time to live in seconds
+    ttl: 5, // time to live in seconds,
+    namespace: 'example-2'
   });
 
   await client.set('foo', 'bar');
