@@ -58,7 +58,8 @@ describe('Redis provider', () => {
       const Redis = proxyquire('../../lib/providers/redis', { ioredis: IoRedis });
       const client = new Redis(options);
       client.set('foo', 'bar', 0);
-      expect(setStub.calledWithExactly('foo', JSON.stringify('bar'))).to.be.true;
+      const [key, value] = setStub.getCall(0).args;
+      expect(setStub.calledWith(key, value, 'EX')).to.be.false;
     });
 
     it('set method should be called with EX parameter when ttl is a positive number', () => {
@@ -69,7 +70,8 @@ describe('Redis provider', () => {
       const Redis = proxyquire('../../lib/providers/redis', { ioredis: IoRedis });
       const client = new Redis(options);
       client.set('foo', 'bar', 1);
-      expect(setStub.calledWithExactly('foo', JSON.stringify('bar'), 'EX', 1)).to.be.true;
+      const [key, value] = setStub.getCall(0).args;
+      expect(setStub.calledWithExactly(key, value, 'EX', 1)).to.be.true;
     });
 
     it('set method should be called with EX parameter when ttl is a negative number', () => {
@@ -80,7 +82,8 @@ describe('Redis provider', () => {
       const Redis = proxyquire('../../lib/providers/redis', { ioredis: IoRedis });
       const client = new Redis(options);
       client.set('foo', 'bar', -1);
-      expect(setStub.calledWithExactly('foo', JSON.stringify('bar'), 'EX', -1)).to.be.true;
+      const [key, value] = setStub.getCall(0).args;
+      expect(setStub.calledWithExactly(key, value, 'EX', -1)).to.be.true;
     });
   });
 });

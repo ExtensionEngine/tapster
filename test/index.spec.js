@@ -72,6 +72,18 @@ describe('CacheManager', () => {
         expect(stubMethod.calledOnce).to.be.true;
       });
     });
+
+    methods.forEach(method => {
+      it(`${method} should return a promise`, () => {
+        sinon.stub(Memory.prototype, method).callsFake(() => {});
+        const CacheManager = proxyquire('../lib', {
+          './providers/memory': Memory
+        });
+        const cache = new CacheManager();
+        const result = cache[method]();
+        expect(result).to.be.an.instanceOf(Promise);
+      });
+    });
   });
 
   describe('namespaces', () => {
