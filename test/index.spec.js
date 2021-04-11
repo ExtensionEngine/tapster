@@ -62,13 +62,14 @@ describe('CacheManager', () => {
   describe('should call provider methods', () => {
     const methods = ['set', 'get', 'has', 'getKeys', 'delete'];
     methods.forEach(method => {
-      it(`should call provider ${method} method`, () => {
-        const stubMethod = sinon.stub(Memory.prototype, method).callsFake(() => {});
+      it(`should call provider ${method} method`, async () => {
+        const stubMethod = sinon.spy(Memory.prototype, method);
         const CacheManager = proxyquire('../lib', {
           './providers/memory': Memory
         });
         const cache = new CacheManager();
-        cache[method]();
+        console.log('Testing method: ', method);
+        await cache[method]();
         expect(stubMethod.calledOnce).to.be.true;
       });
     });
@@ -90,14 +91,14 @@ describe('CacheManager', () => {
     it('should use default namespace when no namespace is specified', () => {
       const CacheManager = require('../lib');
       const cache = new CacheManager({ ttl: 10 });
-      expect(cache.namespace).to.be.eq('default');
+      expect(cache.options.namespace).to.be.eq('default');
     });
 
     it('should use provided namespace', () => {
       const CacheManager = require('../lib');
       const namespace = 'test';
       const cache = new CacheManager({ namespace });
-      expect(cache.namespace).to.be.eq(namespace);
+      expect(cache.options.namespace).to.be.eq(namespace);
     });
 
     const methods = [
@@ -109,28 +110,28 @@ describe('CacheManager', () => {
     ];
 
     methods.forEach(({ name, args }) => {
-      it(`${name} should call provider's ${name} using the default namespace`, () => {
-        const stubMethod = sinon.stub(Memory.prototype, name).callsFake(() => {});
+      it(`${name} should call provider's ${name} using the default namespace`, async () => {
+        const stubMethod = sinon.spy(Memory.prototype, name);
         const CacheManager = proxyquire('../lib', {
           './providers/memory': Memory
         });
         const [key] = args;
         const cache = new CacheManager();
-        cache[name](...args);
+        await cache[name](...args);
         expect(stubMethod.calledWith(`default:${key}`)).to.be.true;
       });
     });
 
     methods.forEach(({ name, args }) => {
-      it(`${name} should call provider's ${name} using the given namespace`, () => {
-        const stubMethod = sinon.stub(Memory.prototype, name).callsFake(() => {});
+      it(`${name} should call provider's ${name} using the given namespace`, async () => {
+        const stubMethod = sinon.spy(Memory.prototype, name);
         const CacheManager = proxyquire('../lib', {
           './providers/memory': Memory
         });
         const namespace = 'test';
         const [key] = args;
         const cache = new CacheManager({ namespace });
-        cache[name](...args);
+        await cache[name](...args);
         expect(stubMethod.calledWith(`${namespace}:${key}`)).to.be.true;
       });
     });
