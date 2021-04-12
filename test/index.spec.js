@@ -159,4 +159,32 @@ describe('CacheManager', () => {
       expect(keys).to.have.all.members(['foo', 'zoo']);
     });
   });
+
+  describe('serialization', () => {
+    it('should use JSON.stringify serialize by default', () => {
+      const CacheManager = require('../lib');
+      const cache = new CacheManager();
+      expect(cache.options.serialize).to.be.eq(JSON.stringify);
+    });
+
+    it('should use JSON.parse deserialize by default', () => {
+      const CacheManager = require('../lib');
+      const cache = new CacheManager();
+      expect(cache.options.deserialize).to.be.eq(JSON.parse);
+    });
+
+    it('should use custom serialize function when provided', () => {
+      const serialize = sinon.fake();
+      const CacheManager = require('../lib');
+      const cache = new CacheManager({ serialize });
+      expect(cache.options.serialize).to.be.eq(serialize);
+    });
+
+    it('should use custom deserialize function when provided', () => {
+      const deserialize = sinon.fake();
+      const CacheManager = require('../lib');
+      const cache = new CacheManager({ deserialize });
+      expect(cache.options.deserialize).to.be.eq(deserialize);
+    });
+  });
 });
