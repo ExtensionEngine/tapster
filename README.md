@@ -57,7 +57,7 @@ const client = new CacheManager({
 ```
 
 ### Custom store
-You can use your own custom store by creating one with the same API as the built-in memory stores (such as a memory or redis). See `examples/custom-store.js`.
+You can use your own custom store by creating one with the same API as the built-in memory stores (such as a memory or redis). See [example](./examples/custom-store.js).
 ```js
 class CustomStore { /* ... */ }
 const client = new CacheManager({ store: CustomStore });
