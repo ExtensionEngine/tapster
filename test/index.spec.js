@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
-const sinon = require('sinon');
-const proxyquire = require('proxyquire');
 const Memory = require('../lib/providers/memory');
+const proxyquire = require('proxyquire');
+const sinon = require('sinon');
 
 describe('CacheManager', () => {
   afterEach(() => {
