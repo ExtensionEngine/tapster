@@ -1,9 +1,13 @@
 # Tapster
-Cache adapter module for NodeJs. WIP 🚧 🚧
+Cache adapter module for NodeJs.
 
 ## Installation:
 ```
 npm install @extensionengine/tapster
+```
+```js
+const CacheManager = require('@extensionengine/tapster');
+const cache = new CacheManager({ /* ... */ });
 ```
 
 ## Store providers
