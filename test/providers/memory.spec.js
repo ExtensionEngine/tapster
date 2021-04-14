@@ -4,11 +4,7 @@ const Memory = require('../../lib/providers/memory');
 
 describe('Memory provider', () => {
   describe('create method', () => {
-    it('should have a create property', () => {
-      expect(Memory).to.have.a.property('create');
-    });
-
-    it('create should be a function', () => {
+    it('should have a create property of type function', () => {
       expect(Memory.create).to.be.a('function');
     });
 
@@ -21,12 +17,6 @@ describe('Memory provider', () => {
   describe('set, get, has, getKeys, delete methods', () => {
     const memory = new Memory();
     const methods = ['set', 'get', 'has', 'getKeys', 'delete'];
-    methods.forEach(method => {
-      it(`should have ${method} method`, () => {
-        expect(Memory.prototype).to.have.a.property(method);
-      });
-    });
-
     methods.forEach(method => {
       it(`${method} should return a promise`, () => {
         const result = memory[method]();

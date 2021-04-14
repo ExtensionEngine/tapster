@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
-const Memory = require('../lib/providers/memory');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
@@ -25,12 +24,7 @@ describe('CacheManager', () => {
     });
 
     it('should use redis provider when the store is set to "redis"', () => {
-      const store = 'redis';
       class Redis {
-        constructor() {
-          this.name = store;
-        }
-
         static create() {
           return new this();
         }
@@ -38,24 +32,19 @@ describe('CacheManager', () => {
       const CacheManager = proxyquire('../lib', {
         './providers/redis': Redis
       });
-      const cache = new CacheManager({ store });
-      expect(cache.provider.name).to.be.eq(store);
+      const cache = new CacheManager({ store: 'redis' });
+      expect(cache.provider).to.be.instanceOf(Redis);
     });
 
     it('should use custom store provider when the store is set to custom provider instance', () => {
-      const store = 'custom-store';
       class CustomStore {
-        constructor() {
-          this.name = store;
-        }
-
         static create() {
           return new this();
         }
       }
       const CacheManager = require('../lib');
       const cache = new CacheManager({ store: CustomStore });
-      expect(cache.provider.name).to.be.eq(store);
+      expect(cache.provider).to.be.instanceOf(CustomStore);
     });
   });
 
@@ -63,13 +52,9 @@ describe('CacheManager', () => {
     const methods = ['set', 'get', 'has', 'getKeys', 'delete'];
     methods.forEach(method => {
       it(`should call provider ${method} method`, () => {
-        const stubMethod = sinon.stub(Memory.prototype, method).callsFake(() => {});
-        const CacheManager = proxyquire('../lib', {
-          './providers/memory': Memory
-        });
+        const CacheManager = require('../lib');
         const cache = new CacheManager();
-        cache[method]();
-        expect(stubMethod.calledOnce).to.be.true;
+        expect(cache).to.respondTo(method);
       });
     });
   });

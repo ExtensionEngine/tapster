@@ -9,12 +9,7 @@ describe('Redis provider', () => {
   afterEach(() => sinon.restore());
 
   describe('create method', () => {
-    it('should have a create property', () => {
-      const Redis = require('../../lib/providers/redis');
-      expect(Redis).to.have.a.property('create');
-    });
-
-    it('create should be a function', () => {
+    it('should have a create property of type function', () => {
       const Redis = require('../../lib/providers/redis');
       expect(Redis.create).to.be.a('function');
     });
@@ -44,7 +39,7 @@ describe('Redis provider', () => {
     const methods = ['set', 'get', 'has', 'getKeys', 'delete'];
     methods.forEach(method => {
       it(`should have ${method} method`, () => {
-        expect(Redis.prototype).to.have.a.property(method);
+        expect(Redis.prototype).to.respondTo(method);
       });
     });
   });
