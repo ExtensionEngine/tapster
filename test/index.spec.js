@@ -1,7 +1,10 @@
+'use strict';
+
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
+const { Redis, CustomStore } = require('./mocks');
 
 describe('CacheManager', () => {
   afterEach(() => {
@@ -24,11 +27,6 @@ describe('CacheManager', () => {
     });
 
     it('should use redis provider when the store is set to "redis"', () => {
-      class Redis {
-        static create() {
-          return new this();
-        }
-      }
       const CacheManager = proxyquire('../lib', {
         './providers/redis': Redis
       });
@@ -37,11 +35,6 @@ describe('CacheManager', () => {
     });
 
     it('should use custom store provider when the store is set to custom provider instance', () => {
-      class CustomStore {
-        static create() {
-          return new this();
-        }
-      }
       const CacheManager = require('../lib');
       const cache = new CacheManager({ store: CustomStore });
       expect(cache.provider).to.be.instanceOf(CustomStore);

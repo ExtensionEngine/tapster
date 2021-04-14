@@ -1,7 +1,10 @@
+'use strict';
+
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
+const { IoRedis } = require('../mocks');
 
 describe('Redis provider', () => {
   const options = { host: 'localhost', port: 6379 };
@@ -15,20 +18,17 @@ describe('Redis provider', () => {
     });
 
     it('create should return the class instance', () => {
-      class IoRedis {}
       const Redis = proxyquire('../../lib/providers/redis', { ioredis: IoRedis });
       const client = Redis.create(options);
       expect(client).to.be.an.instanceOf(Redis);
     });
 
     it('create should throw an error when the host is not provided', () => {
-      class IoRedis {}
       const Redis = proxyquire('../../lib/providers/redis', { ioredis: IoRedis });
       expect(() => Redis.create({ port: 6379 })).to.throw;
     });
 
     it('create should throw an error when the port is not provided', () => {
-      class IoRedis {}
       const Redis = proxyquire('../../lib/providers/redis', { ioredis: IoRedis });
       expect(() => Redis.create({ host: 'localhost' })).to.throw;
     });
@@ -46,9 +46,6 @@ describe('Redis provider', () => {
 
   describe('set()', () => {
     it('set method should not be called with EX parameter when ttl is 0', () => {
-      class IoRedis {
-        set() {}
-      }
       const setStub = sinon.stub(IoRedis.prototype, 'set').callsFake(() => {});
       const Redis = proxyquire('../../lib/providers/redis', { ioredis: IoRedis });
       const client = new Redis(options);
@@ -57,9 +54,6 @@ describe('Redis provider', () => {
     });
 
     it('set method should be called with EX parameter when ttl is a positive number', () => {
-      class IoRedis {
-        set() {}
-      }
       const setStub = sinon.stub(IoRedis.prototype, 'set').callsFake(() => {});
       const Redis = proxyquire('../../lib/providers/redis', { ioredis: IoRedis });
       const client = new Redis(options);
@@ -68,9 +62,6 @@ describe('Redis provider', () => {
     });
 
     it('set method should be called with EX parameter when ttl is a negative number', () => {
-      class IoRedis {
-        set() {}
-      }
       const setStub = sinon.stub(IoRedis.prototype, 'set').callsFake(() => {});
       const Redis = proxyquire('../../lib/providers/redis', { ioredis: IoRedis });
       const client = new Redis(options);

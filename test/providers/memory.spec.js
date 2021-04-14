@@ -1,3 +1,5 @@
+'use strict';
+
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 const Memory = require('../../lib/providers/memory');
