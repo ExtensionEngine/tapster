@@ -4,6 +4,7 @@
 const { expect } = require('chai');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
+const Memory = require('../lib/providers/memory');
 const { Redis, CustomStore } = require('./mocks');
 
 describe('CacheManager', () => {
@@ -13,17 +14,15 @@ describe('CacheManager', () => {
 
   describe('constructor', () => {
     it('should use memory provider when the store is set to "memory"', () => {
-      const store = 'memory';
       const CacheManager = require('../lib');
-      const cache = new CacheManager({ store });
-      expect(cache.provider.name).to.be.eq(store);
+      const cache = new CacheManager({ store: 'memory' });
+      expect(cache.provider).to.be.instanceOf(Memory);
     });
 
     it('should use memory provider by default', () => {
-      const store = 'memory';
       const CacheManager = require('../lib');
       const cache = new CacheManager();
-      expect(cache.provider.name).to.be.eq(store);
+      expect(cache.provider).to.be.instanceOf(Memory);
     });
 
     it('should use redis provider when the store is set to "redis"', () => {
@@ -41,10 +40,10 @@ describe('CacheManager', () => {
     });
   });
 
-  describe('should call provider methods', () => {
+  describe('should have following methods', () => {
     const methods = ['set', 'get', 'has', 'getKeys', 'delete'];
     methods.forEach(method => {
-      it(`should call provider ${method} method`, () => {
+      it(`should have ${method} method`, () => {
         const CacheManager = require('../lib');
         const cache = new CacheManager();
         expect(cache).to.respondTo(method);

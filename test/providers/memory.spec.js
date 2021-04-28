@@ -7,7 +7,7 @@ const Memory = require('../../lib/providers/memory');
 describe('Memory provider', () => {
   describe('create method', () => {
     it('should have a create property of type function', () => {
-      expect(Memory.create).to.be.a('function');
+      expect(Memory).itself.to.respondTo('create');
     });
 
     it('create should return the class instance', () => {
