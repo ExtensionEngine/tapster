@@ -14,19 +14,19 @@ describe('CacheManager', () => {
 
   describe('constructor', () => {
     it('should use memory provider when the store is set to "memory"', () => {
-      const CacheManager = require('../lib');
+      const { CacheManager } = require('../lib');
       const cache = new CacheManager({ store: 'memory' });
       expect(cache.provider).to.be.instanceOf(Memory);
     });
 
     it('should use memory provider by default', () => {
-      const CacheManager = require('../lib');
+      const { CacheManager } = require('../lib');
       const cache = new CacheManager();
       expect(cache.provider).to.be.instanceOf(Memory);
     });
 
     it('should use redis provider when the store is set to "redis"', () => {
-      const CacheManager = proxyquire('../lib', {
+      const { CacheManager } = proxyquire('../lib', {
         './providers/redis': Redis
       });
       const cache = new CacheManager({ store: 'redis' });
@@ -34,7 +34,7 @@ describe('CacheManager', () => {
     });
 
     it('should use custom store provider when the store is set to custom provider instance', () => {
-      const CacheManager = require('../lib');
+      const { CacheManager } = require('../lib');
       const cache = new CacheManager({ store: CustomStore });
       expect(cache.provider).to.be.instanceOf(CustomStore);
     });
@@ -44,7 +44,7 @@ describe('CacheManager', () => {
     const methods = ['set', 'get', 'has', 'getKeys', 'delete'];
     methods.forEach(method => {
       it(`should have ${method} method`, () => {
-        const CacheManager = require('../lib');
+        const { CacheManager } = require('../lib');
         const cache = new CacheManager();
         expect(cache).to.respondTo(method);
       });
@@ -53,7 +53,7 @@ describe('CacheManager', () => {
 
   describe('set()', () => {
     it('should throw an error when key is undefined', async () => {
-      const CacheManager = require('../lib');
+      const { CacheManager } = require('../lib');
       const cache = new CacheManager();
       let error = null;
       try {
@@ -65,7 +65,7 @@ describe('CacheManager', () => {
     });
 
     it('should not throw an error when key is provided', async () => {
-      const CacheManager = require('../lib');
+      const { CacheManager } = require('../lib');
       const cache = new CacheManager();
       let error = null;
       try {

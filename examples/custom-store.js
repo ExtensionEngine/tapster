@@ -1,6 +1,6 @@
 'use strict';
 
-const CacheManager = require('../lib');
+const { CacheManager } = require('../lib');
 
 class Custom {
   constructor() {

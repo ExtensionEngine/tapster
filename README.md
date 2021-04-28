@@ -6,7 +6,7 @@ Cache adapter module for NodeJs.
 npm install @extensionengine/tapster
 ```
 ```js
-const CacheManager = require('@extensionengine/tapster');
+const { CacheManager } = require('@extensionengine/tapster');
 const cache = new CacheManager({ /* ... */ });
 ```
 
