@@ -21,7 +21,7 @@ describe('Memory provider', () => {
     const methods = ['set', 'get', 'has', 'getKeys', 'delete'];
     methods.forEach(method => {
       it(`${method} should return a promise`, () => {
-        const result = memory[method]();
+        const result = memory[method]('test');
         expect(result).to.be.an.instanceOf(Promise);
       });
     });

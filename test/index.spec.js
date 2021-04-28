@@ -50,4 +50,30 @@ describe('CacheManager', () => {
       });
     });
   });
+
+  describe('set()', () => {
+    it('should throw an error when key is undefined', async () => {
+      const CacheManager = require('../lib');
+      const cache = new CacheManager();
+      let error = null;
+      try {
+        await cache.set();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).to.be.instanceOf(Error);
+    });
+
+    it('should not throw an error when key is provided', async () => {
+      const CacheManager = require('../lib');
+      const cache = new CacheManager();
+      let error = null;
+      try {
+        await cache.set('test');
+      } catch (err) {
+        error = err;
+      }
+      expect(error).to.not.be.instanceOf(Error);
+    });
+  });
 });
