@@ -75,7 +75,7 @@ await client.get('foo'); // bar
 - `password` (optional) - redis password.
 
 ## API
-- `set(key, value, ttl)` - TTL is optional. The global ttl will be used if the set method is called without a ttl parameter.
+- `set(key, value, ttl)` - TTL is optional. The cache manager instance's TTL will be used if the set method is called without a ttl parameter.
 - `get(key) => value`
 - `delete(key)`
 - `has(key)`
