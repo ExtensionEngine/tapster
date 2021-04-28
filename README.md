@@ -16,33 +16,31 @@ const cache = new CacheManager({ /* ... */ });
 - custom - use any store you want, as long as it has the same API
 
 ## Usage
-See examples below and in the examples directory.
+See examples below and in the [examples](./examples) directory.
 
 ### Memory store
 ```js
 const client = new CacheManager({ store: 'memory', ttl: 10 /* seconds */ });
 
-(async function () {
-  // If the set method is called without ttl, the default ttl will be used
-  await client.set('foo', 'bar');
-  await client.get('foo'); // bar
-  await client.has('foo') // true
-  await client.has('baz'); // false
+// If the set method is called without ttl, the default ttl will be used
+await client.set('foo', 'bar');
+await client.get('foo'); // bar
+await client.has('foo') // true
+await client.has('baz'); // false
 
-  await sleep('10s');
-  await client.get('foo'); // undefined
-  await client.has('foo') // false
+await sleep('10s');
+await client.get('foo'); // undefined
+await client.has('foo') // false
 
-  // When ttl is defined, it will overwrite the default one
-  await client.set('foo', 'bar', 5);
-  await client.has('foo') // true
+// When ttl is defined, it will overwrite the default one
+await client.set('foo', 'bar', 5);
+await client.has('foo') // true
 
-  await sleep('5s');
-  await client.has('foo') // false
+await sleep('5s');
+await client.has('foo') // false
 
-  // ttl = 0 means no expiration time
-  await client.set('foo', 'bar', 0);
-})()
+// ttl = 0 means no expiration time
+await client.set('foo', 'bar', 0);
 ```
 
 ### Redis store
@@ -54,10 +52,8 @@ const client = new CacheManager({
   ttl: 10 /* seconds */
 });
 
-// ...
-  await client.set('foo', 'bar');
-  await client.get('foo'); // bar
-// ...  
+await client.set('foo', 'bar');
+await client.get('foo'); // bar
 ```
 
 ### Custom store
@@ -66,10 +62,8 @@ You can use your own custom store by creating one with the same API as the built
 class CustomStore { /* ... */ }
 const client = new CacheManager({ store: CustomStore });
 
-// ...
-  await client.set('foo', 'bar');
-  await client.get('foo'); // bar
-// ...  
+await client.set('foo', 'bar');
+await client.get('foo'); // bar
 ```
 ## Options
 ### Common
