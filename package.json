@@ -1,0 +1,57 @@
+{
+  "name": "@extensionengine/tapster",
+  "version": "0.0.1",
+  "description": "Cache adapter module for NodeJs",
+  "keywords": [
+    "cache",
+    "manager",
+    "Extension Engine",
+    "nodejs"
+  ],
+  "homepage": "https://github.com/ExtensionEngine/tapster#readme",
+  "bugs": {
+    "url": "https://github.com/ExtensionEngine/tapster/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExtensionEngine/tapster.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Extension Engine",
+    "email": "info@extensionengine.com",
+    "url": "https://extensionengine.com"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "mocha 'test/**/*.spec.js'",
+    "release": "np"
+  },
+  "dependencies": {
+    "auto-bind": "^4.0.0",
+    "ioredis": "^4.24.4",
+    "lru-cache": "^6.0.0",
+    "micromatch": "^4.0.2",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^7.22.0",
+    "eslint-config-semistandard": "^15.0.1",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "mocha": "^8.3.2",
+    "np": "^7.4.0",
+    "proxyquire": "^2.1.3",
+    "sinon": "^10.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
