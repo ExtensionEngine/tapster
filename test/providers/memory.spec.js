@@ -1,15 +1,13 @@
+'use strict';
+
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 const Memory = require('../../lib/providers/memory');
 
 describe('Memory provider', () => {
   describe('create method', () => {
-    it('should have a create property', () => {
-      expect(Memory).to.have.a.property('create');
-    });
-
-    it('create should be a function', () => {
-      expect(Memory.create).to.be.a('function');
+    it('should have a create property of type function', () => {
+      expect(Memory).itself.to.respondTo('create');
     });
 
     it('create should return the class instance', () => {
@@ -22,14 +20,8 @@ describe('Memory provider', () => {
     const memory = new Memory();
     const methods = ['set', 'get', 'has', 'getKeys', 'delete'];
     methods.forEach(method => {
-      it(`should have ${method} method`, () => {
-        expect(Memory.prototype).to.have.a.property(method);
-      });
-    });
-
-    methods.forEach(method => {
       it(`${method} should return a promise`, () => {
-        const result = memory[method]();
+        const result = memory[method]('test');
         expect(result).to.be.an.instanceOf(Promise);
       });
     });

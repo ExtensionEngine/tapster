@@ -1,6 +1,6 @@
 'use strict';
 
-const CacheManager = require('../lib');
+const { CacheManager } = require('../lib');
 
 async function example1() {
   const client = new CacheManager({

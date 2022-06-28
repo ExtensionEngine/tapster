@@ -1,9 +1,13 @@
 # Tapster
-Cache adapter module for NodeJs. WIP 🚧 🚧
+Cache adapter module for NodeJs.
 
 ## Installation:
 ```
 npm install @extensionengine/tapster
+```
+```js
+const { CacheManager } = require('@extensionengine/tapster');
+const cache = new CacheManager({ /* ... */ });
 ```
 
 ## Store providers
@@ -12,7 +16,7 @@ npm install @extensionengine/tapster
 - custom - use any store you want, as long as it has the same API
 
 ## Usage
-See examples below and in the examples directory.
+See examples below and in the [examples](./examples) directory.
 
 ### Memory store
 ```js
@@ -48,22 +52,18 @@ const client = new CacheManager({
   ttl: 10 /* seconds */
 });
 
-// ...
-  await client.set('foo', 'bar');
-  await client.get('foo'); // bar
-// ...  
+await client.set('foo', 'bar');
+await client.get('foo'); // bar
 ```
 
 ### Custom store
-You can use your own custom store by creating one with the same API as the built-in memory stores (such as a memory or redis). See `examples/custom-store.js`.
+You can use your own custom store by creating one with the same API as the built-in memory stores (such as a memory or redis). See [example](./examples/custom-store.js).
 ```js
 class CustomStore { /* ... */ }
 const client = new CacheManager({ store: CustomStore });
 
-// ...
-  await client.set('foo', 'bar');
-  await client.get('foo'); // bar
-// ...  
+await client.set('foo', 'bar');
+await client.get('foo'); // bar
 ```
 
 ### Namespaces
@@ -99,7 +99,7 @@ console.log(await cars.get('record-1')); // Honda
 - `password` (optional) - redis password.
 
 ## API
-- `set(key, value, ttl)` - TTL is optional. The global ttl will be used if the set method is called without a ttl parameter.
+- `set(key, value, ttl)` - TTL is optional. The cache manager instance's TTL will be used if the set method is called without a ttl parameter.
 - `get(key) => value`
 - `delete(key)`
 - `has(key)`
