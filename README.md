@@ -67,7 +67,7 @@ await client.get('foo'); // bar
 ```
 
 ### Namespaces
-You can namespace your cache instance to avoid key collisions and allow you to clear only a certain namespace while using the same database.
+Namespacing cache instance enables avoiding key collisions and allows clearing only a certain namespace while using the same database.
 ```js
 const users = new CacheManager({ namespace: 'users' });
 const cars = new CacheManager({ namespace: 'cars' });
