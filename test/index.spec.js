@@ -49,20 +49,32 @@ describe('CacheManager', () => {
         expect(cache).to.respondTo(method);
       });
     });
+
+    methods.forEach(method => {
+      it(`${method} should return a promise`, () => {
+        sinon.stub(Memory.prototype, method).callsFake(() => {});
+        const { CacheManager } = proxyquire('../lib', {
+          './providers/memory': Memory
+        });
+        const cache = new CacheManager();
+        const result = cache[method]();
+        expect(result).to.be.an.instanceOf(Promise);
+      });
+    });
   });
 
   describe('namespaces', () => {
     it('should use default namespace when no namespace is specified', () => {
       const { CacheManager } = require('../lib');
       const cache = new CacheManager({ ttl: 10 });
-      expect(cache.namespace).to.be.eq('default');
+      expect(cache.options.namespace).to.be.eq('default');
     });
 
     it('should use provided namespace', () => {
       const { CacheManager } = require('../lib');
       const namespace = 'test';
       const cache = new CacheManager({ namespace });
-      expect(cache.namespace).to.be.eq(namespace);
+      expect(cache.options.namespace).to.be.eq(namespace);
     });
 
     const methods = [
@@ -74,28 +86,28 @@ describe('CacheManager', () => {
     ];
 
     methods.forEach(({ name, args }) => {
-      it(`${name} should call provider's ${name} using the default namespace`, () => {
-        const stubMethod = sinon.stub(Memory.prototype, name).callsFake(() => {});
+      it(`${name} should call provider's ${name} using the default namespace`, async () => {
+        const stubMethod = sinon.spy(Memory.prototype, name);
         const { CacheManager } = proxyquire('../lib', {
           './providers/memory': Memory
         });
         const [key] = args;
         const cache = new CacheManager();
-        cache[name](...args);
+        await cache[name](...args);
         expect(stubMethod.calledWith(`default:${key}`)).to.be.true;
       });
     });
 
     methods.forEach(({ name, args }) => {
-      it(`${name} should call provider's ${name} using the given namespace`, () => {
-        const stubMethod = sinon.stub(Memory.prototype, name).callsFake(() => {});
+      it(`${name} should call provider's ${name} using the given namespace`, async () => {
+        const stubMethod = sinon.spy(Memory.prototype, name);
         const { CacheManager } = proxyquire('../lib', {
           './providers/memory': Memory
         });
         const namespace = 'test';
         const [key] = args;
         const cache = new CacheManager({ namespace });
-        cache[name](...args);
+        await cache[name](...args);
         expect(stubMethod.calledWith(`${namespace}:${key}`)).to.be.true;
       });
     });
@@ -121,6 +133,34 @@ describe('CacheManager', () => {
       await cache2.clear();
       const keys = await cache1.getKeys();
       expect(keys).to.have.all.members(['foo', 'zoo']);
+    });
+  });
+
+  describe('serialization', () => {
+    it('should use JSON.stringify serialize by default', () => {
+      const { CacheManager } = require('../lib');
+      const cache = new CacheManager();
+      expect(cache.options.serialize).to.be.eq(JSON.stringify);
+    });
+
+    it('should use JSON.parse deserialize by default', () => {
+      const { CacheManager } = require('../lib');
+      const cache = new CacheManager();
+      expect(cache.options.deserialize).to.be.eq(JSON.parse);
+    });
+
+    it('should use custom serialize function when provided', () => {
+      const serialize = sinon.fake();
+      const { CacheManager } = require('../lib');
+      const cache = new CacheManager({ serialize });
+      expect(cache.options.serialize).to.be.eq(serialize);
+    });
+
+    it('should use custom deserialize function when provided', () => {
+      const deserialize = sinon.fake();
+      const { CacheManager } = require('../lib');
+      const cache = new CacheManager({ deserialize });
+      expect(cache.options.deserialize).to.be.eq(deserialize);
     });
   });
 

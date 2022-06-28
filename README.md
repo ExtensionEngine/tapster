@@ -66,6 +66,13 @@ await client.set('foo', 'bar');
 await client.get('foo'); // bar
 ```
 
+### Serialization
+Tapster uses `JSON.stringify` and `JSON.parse` for data serialization.
+You can optionally provide your own serialization functions to support extra data types or to serialize to something other than JSON.
+```js
+const cache = new CacheManager({ serialize: JSON.stringify, deserialize: JSON.parse });
+```
+
 ### Namespaces
 Namespacing cache instance enables avoiding key collisions and allows clearing only a certain namespace while using the same database.
 ```js
