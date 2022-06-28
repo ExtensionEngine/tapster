@@ -51,6 +51,79 @@ describe('CacheManager', () => {
     });
   });
 
+  describe('namespaces', () => {
+    it('should use default namespace when no namespace is specified', () => {
+      const { CacheManager } = require('../lib');
+      const cache = new CacheManager({ ttl: 10 });
+      expect(cache.namespace).to.be.eq('default');
+    });
+
+    it('should use provided namespace', () => {
+      const { CacheManager } = require('../lib');
+      const namespace = 'test';
+      const cache = new CacheManager({ namespace });
+      expect(cache.namespace).to.be.eq(namespace);
+    });
+
+    const methods = [
+      { name: 'set', args: ['foo', 'bar'] },
+      { name: 'get', args: ['foo'] },
+      { name: 'has', args: ['foo'] },
+      { name: 'delete', args: ['foo'] },
+      { name: 'getKeys', args: ['*'] }
+    ];
+
+    methods.forEach(({ name, args }) => {
+      it(`${name} should call provider's ${name} using the default namespace`, () => {
+        const stubMethod = sinon.stub(Memory.prototype, name).callsFake(() => {});
+        const { CacheManager } = proxyquire('../lib', {
+          './providers/memory': Memory
+        });
+        const [key] = args;
+        const cache = new CacheManager();
+        cache[name](...args);
+        expect(stubMethod.calledWith(`default:${key}`)).to.be.true;
+      });
+    });
+
+    methods.forEach(({ name, args }) => {
+      it(`${name} should call provider's ${name} using the given namespace`, () => {
+        const stubMethod = sinon.stub(Memory.prototype, name).callsFake(() => {});
+        const { CacheManager } = proxyquire('../lib', {
+          './providers/memory': Memory
+        });
+        const namespace = 'test';
+        const [key] = args;
+        const cache = new CacheManager({ namespace });
+        cache[name](...args);
+        expect(stubMethod.calledWith(`${namespace}:${key}`)).to.be.true;
+      });
+    });
+
+    it('should delete all records under the certain namespace when clear method is called', async () => {
+      const { CacheManager } = require('../lib');
+      const cache = new CacheManager({ namespace: 'test-2' });
+      await cache.set('foo', 'bar');
+      await cache.set('zoo', 'baz');
+      await cache.clear();
+      const keys = await cache.getKeys();
+      expect(keys.length).to.be.eq(0);
+    });
+
+    it('clear method should delete only records under the given namespace', async () => {
+      const { CacheManager } = require('../lib');
+      const cache1 = new CacheManager({ namespace: 'test-1' });
+      const cache2 = new CacheManager({ namespace: 'test-2' });
+      await cache1.set('foo', 'bar');
+      await cache1.set('zoo', 'baz');
+      await cache2.set('foo', 'bar');
+      await cache2.set('zoo', 'baz');
+      await cache2.clear();
+      const keys = await cache1.getKeys();
+      expect(keys).to.have.all.members(['foo', 'zoo']);
+    });
+  });
+
   describe('set()', () => {
     it('should throw an error when key is undefined', async () => {
       const { CacheManager } = require('../lib');
